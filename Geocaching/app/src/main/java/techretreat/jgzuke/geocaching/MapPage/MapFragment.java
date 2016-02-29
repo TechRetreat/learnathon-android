@@ -11,13 +11,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import techretreat.jgzuke.geocaching.MainActivity;
 import techretreat.jgzuke.geocaching.R;
@@ -28,6 +35,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     private GoogleMap map;
     private String userId;
+    private Map<Marker, String> markerToCacheId;
+    private Map<String, MapCaches.Cache> cacheIdToCache;
 
     public static MapFragment newInstance(String userId) {
         Bundle args = new Bundle();
@@ -40,8 +49,31 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public MapFragment() {
     }
 
+    public void setCaches(Map<String, MapCaches.Cache> cacheIdToCache) {
+        this.cacheIdToCache = cacheIdToCache;
+        makeMarkers();
+    }
+
+    private void makeMarkers() {
+        if(map == null || cacheIdToCache == null) {
+            return;
+        }
+        markerToCacheId = new HashMap<>(cacheIdToCache.size());
+        for(Map.Entry<String, MapCaches.Cache> entry : cacheIdToCache.entrySet()) {
+            MapCaches.Cache cache = entry.getValue();
+            LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(cache.name)
+                    .snippet(cache.id));
+            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            markerToCacheId.put(marker, entry.getKey());
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getMapAsync(this);
     }
 
@@ -49,10 +81,36 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         tryZoomToCurrentLocation();
+        setMapInfoWindowAdapter();
+        makeMarkers();
     }
 
     public void updateLocationPermissions() {
         tryZoomToCurrentLocation();
+    }
+
+    private void setMapInfoWindowAdapter() {
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View v = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
+
+                String cacheId = markerToCacheId.get(marker);
+                MapCaches.Cache cache = cacheIdToCache.get(cacheId);
+
+                TextView name = (TextView) v.findViewById(R.id.name);
+                TextView description = (TextView) v.findViewById(R.id.description);
+
+                name.setText(cache.name);
+                description.setText(cache.id);
+                return v;
+            }
+        });
     }
 
     private void tryZoomToCurrentLocation() {

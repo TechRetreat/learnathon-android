@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import techretreat.jgzuke.geocaching.FoundPage.FoundController;
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
 
-        private Map<Integer, Fragment> pageReferenceMap;
+        private Map<Integer, Fragment> pageReferenceMap = new HashMap<>(3);
 
         public GeocachingPagerAdapter(FragmentManager fm) {
             super(fm);

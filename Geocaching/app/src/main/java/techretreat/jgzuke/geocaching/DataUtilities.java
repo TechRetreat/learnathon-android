@@ -9,10 +9,10 @@ import java.io.InputStream;
 
 public class DataUtilities <T> {
 
-    public T getResponse(Context context, Class<T> type) {
+    public T getResponse(Context context, Class<T> type, int jsonResId) {
         //TODO: take in api call instead, run async
         try {
-            InputStream is = context.getResources().openRawResource(R.raw.caches_found);
+            InputStream is = context.getResources().openRawResource(jsonResId);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

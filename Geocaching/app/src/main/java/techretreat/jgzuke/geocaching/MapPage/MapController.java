@@ -3,6 +3,8 @@ package techretreat.jgzuke.geocaching.MapPage;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import java.util.Map;
+
 public class MapController implements MapDataInteractor.DataReceiver {
 
     private String userId;
@@ -15,9 +17,16 @@ public class MapController implements MapDataInteractor.DataReceiver {
 
         mapFragment = MapFragment.newInstance(userId);
         mapDataInteractor = new MapDataInteractor(userId, context, this);
+
+        mapDataInteractor.getCaches();
     }
 
     public Fragment getFragment() {
         return mapFragment;
+    }
+
+    @Override
+    public void getCaches(Map<String, MapCaches.Cache> cacheIdToCache) {
+        mapFragment.setCaches(cacheIdToCache);
     }
 }

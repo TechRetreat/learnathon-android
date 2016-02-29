@@ -3,6 +3,7 @@ package techretreat.jgzuke.geocaching.FoundPage;
 import android.content.Context;
 
 import techretreat.jgzuke.geocaching.DataUtilities;
+import techretreat.jgzuke.geocaching.R;
 
 public class FoundDataInteractor {
 
@@ -21,7 +22,7 @@ public class FoundDataInteractor {
     }
 
     public void getFoundCaches() {
-        FoundCaches response = new DataUtilities<FoundCaches>().getResponse(context, FoundCaches.class);
+        FoundCaches response = new DataUtilities<FoundCaches>().getResponse(context, FoundCaches.class, R.raw.caches_found);
         reciever.getFoundCaches(response.caches);
     }
 }
