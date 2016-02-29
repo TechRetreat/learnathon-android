@@ -1,5 +1,6 @@
 package techretreat.jgzuke.geocaching;
 
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,13 +8,19 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.Map;
 
 import techretreat.jgzuke.geocaching.FoundPage.FoundController;
 import techretreat.jgzuke.geocaching.MapPage.MapController;
+import techretreat.jgzuke.geocaching.MapPage.MapFragment;
 import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
     private static final int NUMBER_OF_TABS = 3;
 
     private ViewPager viewPager;
@@ -48,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (grantResults.length == 0) {
+            return;
+        }
+        switch (requestCode) {
+            case MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Fragment fragment = pagerAdapter.getActiveFragment(viewPager.getCurrentItem());
+                    if (fragment instanceof MapFragment) {
+                        ((MapFragment) fragment).updateLocationPermissions();
+                    }
+                }
+                break;
+
+        }
+    }
+
     private class GeocachingTabSelectedListener implements TabLayout.OnTabSelectedListener {
 
         @Override
@@ -68,22 +93,39 @@ public class MainActivity extends AppCompatActivity {
 
     private class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
 
+        private Map<Integer, Fragment> pageReferenceMap;
+
         public GeocachingPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        public Fragment getActiveFragment(int index) {
+            return pageReferenceMap.get(index);
+        }
+
         @Override
         public Fragment getItem(int position) {
+            Fragment fragment = null;
             switch (position) {
                 case 0:
-                    return new FoundController(userId, MainActivity.this).getFragment();
+                    fragment = new FoundController(userId, MainActivity.this).getFragment();
+                    break;
                 case 1:
-                    return new MapController(userId, MainActivity.this).getFragment();
+                    fragment = new MapController(userId, MainActivity.this).getFragment();
+                    break;
                 case 2:
-                    return new SettingsController(userId, MainActivity.this).getFragment();
-                default:
-                    return null;
+                    fragment = new SettingsController(userId, MainActivity.this).getFragment();
+                    break;
             }
+            pageReferenceMap.put(position, fragment);
+            return fragment;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            pageReferenceMap.put(position, fragment);
+            return fragment;
         }
 
         @Override
