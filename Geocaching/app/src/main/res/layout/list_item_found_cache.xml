@@ -9,7 +9,7 @@
         android:id="@+id/cache_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="23sp"
         tools:text="Example cache name" />
 
     <TextView
@@ -17,9 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cache_name"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:textSize="15sp"
+        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
+        android:textSize="14sp"
         tools:text="Difficulty: 3" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_below="@+id/cache_name"
         android:layout_toRightOf="@+id/cache_difficulty"
         android:layout_toEndOf="@+id/cache_difficulty"
-        android:textSize="15sp"
+        android:textSize="14sp"
         tools:text="Found 3 days ago" />
 
 </RelativeLayout>

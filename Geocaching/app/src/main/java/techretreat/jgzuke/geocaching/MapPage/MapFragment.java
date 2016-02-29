@@ -27,11 +27,7 @@ public class MapFragment extends SupportMapFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        userId = getArguments().getString(KEY_USER_ID);
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+    public void onCreate(Bundle savedInstanceState) {
 
-        return rootView;
     }
 }
