@@ -3,6 +3,8 @@ package techretreat.jgzuke.geocaching.FoundPage;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import java.util.Map;
+
 public class FoundController implements FoundDataInteractor.DataReceiver {
 
     private String userId;
@@ -24,7 +26,7 @@ public class FoundController implements FoundDataInteractor.DataReceiver {
     }
 
     @Override
-    public void getFoundCaches(FoundCaches.Cache[] caches) {
+    public void getFoundCaches(Map<String, FoundCaches.Cache> caches) {
         foundFragment.setFoundCaches(caches);
     }
 }

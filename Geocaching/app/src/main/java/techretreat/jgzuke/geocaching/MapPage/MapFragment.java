@@ -1,6 +1,7 @@
 package techretreat.jgzuke.geocaching.MapPage;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -53,20 +57,23 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void setCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
         this.mapCaches = mapCaches;
+        this.foundCaches = foundCaches;
         makeMarkers();
     }
 
     private void makeMarkers() {
-        if(map == null || mapCaches == null) {
+        if (map == null || mapCaches == null) {
             return;
         }
         markerToCacheId = new HashMap<>(mapCaches.size());
-        for(Map.Entry<String, MapCaches.Cache> entry : mapCaches.entrySet()) {
+        for (Map.Entry<String, MapCaches.Cache> entry : mapCaches.entrySet()) {
+            boolean found = foundCaches.containsKey(entry.getKey());
             MapCaches.Cache cache = entry.getValue();
             LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
+            float iconColor = found ? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(iconColor)));
             markerToCacheId.put(marker, entry.getKey());
         }
     }
@@ -80,9 +87,19 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        setMapSettings();
         tryZoomToCurrentLocation();
         setMapInfoWindowAdapter();
         makeMarkers();
+    }
+
+    private void setMapSettings() {
+        //TODO: put these in setings to allow user to change
+        UiSettings settings = map.getUiSettings();
+        settings.setCompassEnabled(true);
+        settings.setMyLocationButtonEnabled(true);
+        settings.setZoomControlsEnabled(true);
+        settings.setMapToolbarEnabled(false);
     }
 
     public void updateLocationPermissions() {
@@ -98,17 +115,24 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
             @Override
             public View getInfoContents(Marker marker) {
-                View v = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
-
+                View infoView = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
                 String cacheId = markerToCacheId.get(marker);
-                MapCaches.Cache cache = mapCaches.get(cacheId);
+                final MapCaches.Cache mapCache = mapCaches.get(cacheId);
+                final FoundCaches.Cache foundCache = foundCaches.get(cacheId);
 
-                TextView name = (TextView) v.findViewById(R.id.name);
-                TextView description = (TextView) v.findViewById(R.id.description);
+                TextView name = (TextView) infoView.findViewById(R.id.name);
+                TextView description = (TextView) infoView.findViewById(R.id.description);
+                View viewDetailsButton = infoView.findViewById(R.id.view_details);
 
-                name.setText(cache.name);
-                description.setText(cache.description);
-                return v;
+                name.setText(mapCache.name);
+                description.setText(mapCache.description);
+                viewDetailsButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openViewDetailsDialog(mapCache, foundCache);
+                    }
+                });
+                return infoView;
             }
         });
     }
@@ -129,5 +153,30 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         }
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.38224, -80.32382), 13));
+    }
+
+    private void openViewDetailsDialog(MapCaches.Cache mapCache, FoundCaches.Cache foundCache) {
+        View dialogBody = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
+        TextView name = (TextView) dialogBody.findViewById(R.id.cache_name);
+        TextView description = (TextView) dialogBody.findViewById(R.id.cache_description);
+        TextView cacheFound = (TextView) dialogBody.findViewById(R.id.cache_found);
+
+        name.setText(mapCache.name);
+        description.setText(mapCache.description);
+        boolean hasBeenFound = foundCache != null;
+        if (hasBeenFound) {
+            cacheFound.setBackgroundResource(R.color.button_inactive);
+            cacheFound.setText(DateUtils.getRelativeTimeSpanString(foundCache.found));
+        } else {
+            cacheFound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO set as found with current time
+                }
+            });
+        }
+
+        new AlertDialog.Builder(getContext())
+                .setView(dialogBody).create().show();
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp" >
+
+    <TextView
+        android:id="@+id/cache_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:padding="20dp"
+        android:textColor="@color/primary_accent"
+        android:gravity="center_horizontal"
+        tools:text="Example Cache Name" />
+
+    <TextView
+        android:id="@+id/cache_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        tools:text="Example Cache Description is really long and stuff. You smart. You loyal." />
+
+    <TextView
+        android:id="@+id/cache_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/found_it_button_text"
+        tools:text="Cache Found" />
+</LinearLayout>

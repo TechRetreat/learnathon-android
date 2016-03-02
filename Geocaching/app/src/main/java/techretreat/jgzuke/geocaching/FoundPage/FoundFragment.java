@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import techretreat.jgzuke.geocaching.R;
 import techretreat.jgzuke.geocaching.UiUtilities;
@@ -22,7 +24,7 @@ public class FoundFragment extends Fragment {
     private String userId;
     private RecyclerView cachesRecycerView;
     private CacheAdapter cachesRecycerViewAdapter;
-    private List<FoundCaches.Cache> foundCaches;
+    private List<Map.Entry<String, FoundCaches.Cache>> foundCaches;
 
     public static FoundFragment newInstance(String userId) {
         Bundle args = new Bundle();
@@ -52,8 +54,9 @@ public class FoundFragment extends Fragment {
         cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
     }
 
-    public void setFoundCaches(FoundCaches.Cache[] caches) {
-        foundCaches = Arrays.asList(caches);
+    public void setFoundCaches(Map<String, FoundCaches.Cache> caches) {
+        foundCaches = new ArrayList<>(caches.size());
+        foundCaches.addAll(caches.entrySet());
         if(cachesRecycerViewAdapter != null) {
             cachesRecycerViewAdapter.notifyDataSetChanged();
         }
@@ -87,7 +90,7 @@ public class FoundFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CacheHolder holder, int pos) {
-            FoundCaches.Cache cache = foundCaches.get(pos);
+            FoundCaches.Cache cache = foundCaches.get(pos).getValue();
             holder.bindCache(cache);
         }
 

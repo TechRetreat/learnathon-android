@@ -6,7 +6,7 @@
       "difficulty": 3,
       "location": {
         "latitude": 43.38224,
-        "longitude": -80.32482
+        "longitude": -80.32682
       }
     },
     "mdifpq": {
@@ -15,7 +15,7 @@
       "difficulty": 3,
       "location": {
         "latitude": 43.38224,
-        "longitude": -80.32382
+        "longitude": -80.32582
       }
     },
     "cbdiyd": {
@@ -23,7 +23,7 @@
       "description": "Buy your momma a house",
       "difficulty": 3,
       "location": {
-        "latitude": 43.38254,
+        "latitude": 43.38454,
         "longitude": -80.32382
       }
     },
@@ -32,7 +32,7 @@
       "description": "Buy your whole family houses",
       "difficulty": 3,
       "location": {
-        "latitude": 43.38324,
+        "latitude": 43.38024,
         "longitude": -80.32382
       }
     }
