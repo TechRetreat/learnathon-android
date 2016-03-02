@@ -6,12 +6,14 @@ import android.content.Context;
 import java.util.Map;
 
 import techretreat.jgzuke.geocaching.DataUtilities;
+import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.R;
 
 public class MapDataInteractor {
 
     public interface DataReceiver {
-        void getCaches(Map<String, MapCaches.Cache> cacheIdToCache);
+        void getCaches(Map<String, MapCaches.Cache> mapCaches,
+                       Map<String, FoundCaches.Cache> foundCaches);
     }
 
     private String userId;
@@ -25,7 +27,8 @@ public class MapDataInteractor {
     }
 
     public void getCaches() {
-        MapCaches response = new DataUtilities<MapCaches>().getResponse(context, MapCaches.class, R.raw.caches);
-        reciever.getCaches(response.caches);
+        MapCaches mapCaches = DataUtilities.getResponse(context, MapCaches.class, R.raw.caches);
+        FoundCaches foundCaches = DataUtilities.getResponse(context, FoundCaches.class, R.raw.caches_found);
+        reciever.getCaches(mapCaches.caches, foundCaches.caches);
     }
 }

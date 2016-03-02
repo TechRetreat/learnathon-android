@@ -7,7 +7,7 @@ public class MapCaches {
 
     public static class Cache {
         public String name;
-        public String id;
+        public String description;
         public int difficulty;
         public Location location;
     }

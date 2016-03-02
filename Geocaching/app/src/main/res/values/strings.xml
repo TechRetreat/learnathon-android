@@ -7,6 +7,7 @@
 
     <!-- Map page -->
     <string name="map">Map</string>
+    <string name="marker_info_window_see_details">See Details&#8230;</string>
 
     <!-- Settings page -->
     <string name="settings">Settings</string>

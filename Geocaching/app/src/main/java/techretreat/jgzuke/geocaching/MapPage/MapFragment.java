@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.MainActivity;
 import techretreat.jgzuke.geocaching.R;
 
@@ -36,7 +37,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private GoogleMap map;
     private String userId;
     private Map<Marker, String> markerToCacheId;
-    private Map<String, MapCaches.Cache> cacheIdToCache;
+    private Map<String, MapCaches.Cache> mapCaches;
+    private Map<String, FoundCaches.Cache> foundCaches;
 
     public static MapFragment newInstance(String userId) {
         Bundle args = new Bundle();
@@ -49,24 +51,22 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public MapFragment() {
     }
 
-    public void setCaches(Map<String, MapCaches.Cache> cacheIdToCache) {
-        this.cacheIdToCache = cacheIdToCache;
+    public void setCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
+        this.mapCaches = mapCaches;
         makeMarkers();
     }
 
     private void makeMarkers() {
-        if(map == null || cacheIdToCache == null) {
+        if(map == null || mapCaches == null) {
             return;
         }
-        markerToCacheId = new HashMap<>(cacheIdToCache.size());
-        for(Map.Entry<String, MapCaches.Cache> entry : cacheIdToCache.entrySet()) {
+        markerToCacheId = new HashMap<>(mapCaches.size());
+        for(Map.Entry<String, MapCaches.Cache> entry : mapCaches.entrySet()) {
             MapCaches.Cache cache = entry.getValue();
             LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(position)
-                    .title(cache.name)
-                    .snippet(cache.id));
-            //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
             markerToCacheId.put(marker, entry.getKey());
         }
     }
@@ -101,13 +101,13 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 View v = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
 
                 String cacheId = markerToCacheId.get(marker);
-                MapCaches.Cache cache = cacheIdToCache.get(cacheId);
+                MapCaches.Cache cache = mapCaches.get(cacheId);
 
                 TextView name = (TextView) v.findViewById(R.id.name);
                 TextView description = (TextView) v.findViewById(R.id.description);
 
                 name.setText(cache.name);
-                description.setText(cache.id);
+                description.setText(cache.description);
                 return v;
             }
         });
@@ -127,5 +127,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
             }
         }
+
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.38224, -80.32382), 13));
     }
 }

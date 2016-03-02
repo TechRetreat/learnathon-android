@@ -7,9 +7,9 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class DataUtilities <T> {
+public class DataUtilities {
 
-    public T getResponse(Context context, Class<T> type, int jsonResId) {
+    public static <T> T getResponse(Context context, Class<T> type, int jsonResId) {
         //TODO: take in api call instead, run async
         try {
             InputStream is = context.getResources().openRawResource(jsonResId);

@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 
 import java.util.Map;
 
+import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
+
 public class MapController implements MapDataInteractor.DataReceiver {
 
     private String userId;
@@ -26,7 +28,7 @@ public class MapController implements MapDataInteractor.DataReceiver {
     }
 
     @Override
-    public void getCaches(Map<String, MapCaches.Cache> cacheIdToCache) {
-        mapFragment.setCaches(cacheIdToCache);
+    public void getCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
+        mapFragment.setCaches(mapCaches, foundCaches);
     }
 }

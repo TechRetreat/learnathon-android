@@ -2,13 +2,15 @@ package techretreat.jgzuke.geocaching.FoundPage;
 
 import android.content.Context;
 
+import java.util.Map;
+
 import techretreat.jgzuke.geocaching.DataUtilities;
 import techretreat.jgzuke.geocaching.R;
 
 public class FoundDataInteractor {
 
     public interface DataReceiver {
-        void getFoundCaches(FoundCaches.Cache[] caches);
+        void getFoundCaches(Map<String, FoundCaches.Cache> caches);
     }
 
     private String userId;
@@ -22,7 +24,7 @@ public class FoundDataInteractor {
     }
 
     public void getFoundCaches() {
-        FoundCaches response = new DataUtilities<FoundCaches>().getResponse(context, FoundCaches.class, R.raw.caches_found);
-        reciever.getFoundCaches(response.caches);
+        FoundCaches foundCaches = DataUtilities.getResponse(context, FoundCaches.class, R.raw.caches_found);
+        reciever.getFoundCaches(foundCaches.caches);
     }
 }

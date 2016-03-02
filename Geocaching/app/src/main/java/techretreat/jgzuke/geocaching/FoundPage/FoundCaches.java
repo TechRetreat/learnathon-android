@@ -1,11 +1,12 @@
 package techretreat.jgzuke.geocaching.FoundPage;
 
+import java.util.Map;
+
 public class FoundCaches {
-    public Cache[] caches;
+    public Map<String, Cache> caches;
 
     public static class Cache {
         public String name;
-        public String id;
         public int difficulty;
         public long found;
     }
