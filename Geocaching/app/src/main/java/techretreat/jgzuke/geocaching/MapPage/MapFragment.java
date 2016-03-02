@@ -33,6 +33,7 @@ import java.util.Map;
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.MainActivity;
 import techretreat.jgzuke.geocaching.R;
+import techretreat.jgzuke.geocaching.UiUtilities;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
@@ -166,7 +167,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         boolean hasBeenFound = foundCache != null;
         if (hasBeenFound) {
             cacheFound.setBackgroundResource(R.color.button_inactive);
-            cacheFound.setText(DateUtils.getRelativeTimeSpanString(foundCache.found));
+            cacheFound.setText(UiUtilities.getTimeAgoString(foundCache.found, getContext()));
         } else {
             cacheFound.setOnClickListener(new View.OnClickListener() {
                 @Override

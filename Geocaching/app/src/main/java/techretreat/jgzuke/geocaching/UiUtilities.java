@@ -1,16 +1,16 @@
 package techretreat.jgzuke.geocaching;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 
 public class UiUtilities {
 
     public static String getDifficultyString(int difficulty, Context context) {
-        //TODO: implement
-        return "Difficulty 3 of 5";
+        return context.getString(R.string.difficulty_out_of_five, difficulty);
     }
 
     public static String getTimeAgoString(long timestamp, Context context) {
-        //TODO: implement
-        return "Found 3 days ago";
+        String timeAgo = DateUtils.getRelativeTimeSpanString(context, timestamp).toString();
+        return context.getString(R.string.found_time_ago, timeAgo);
     }
 }
