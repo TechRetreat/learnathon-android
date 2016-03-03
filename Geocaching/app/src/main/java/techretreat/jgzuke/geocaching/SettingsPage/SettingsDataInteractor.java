@@ -4,15 +4,13 @@ import android.content.Context;
 
 public class SettingsDataInteractor {
 
+    private Context context;
+
+    private DataReceiver reciever;
     public interface DataReceiver {
     }
 
-    private String userId;
-    private Context context;
-    private DataReceiver reciever;
-
-    public SettingsDataInteractor(String userId, Context context, DataReceiver reciever) {
-        this.userId = userId;
+    public SettingsDataInteractor(Context context, DataReceiver reciever) {
         this.context = context;
         this.reciever = reciever;
     }

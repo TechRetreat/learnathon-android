@@ -7,14 +7,9 @@ import techretreat.jgzuke.geocaching.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final String KEY_USER_ID = "user_id";
-
-    private String userId;
-
-    public static SettingsFragment newInstance(String userId) {
+    public static SettingsFragment newInstance() {
         Bundle args = new Bundle();
         SettingsFragment fragment = new SettingsFragment();
-        args.putString(KEY_USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -25,7 +20,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        userId = getArguments().getString(KEY_USER_ID);
 
         addPreferencesFromResource(R.xml.preferences);
     }

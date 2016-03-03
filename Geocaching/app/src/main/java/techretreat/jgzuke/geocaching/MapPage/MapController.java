@@ -7,28 +7,29 @@ import java.util.Map;
 
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 
-public class MapController implements MapDataInteractor.DataReceiver {
+public class MapController implements MapDataInteractor.DataReceiver, MapFragment.Callback {
 
-    private String userId;
-    private Context context;
     private MapFragment mapFragment;
     private MapDataInteractor mapDataInteractor;
 
-    public MapController(String userId, Context context) {
-        this.userId = userId;
-
-        mapFragment = MapFragment.newInstance(userId);
-        mapDataInteractor = new MapDataInteractor(userId, context, this);
-
-        mapDataInteractor.getCaches();
+    public MapController(Context context) {
+        mapFragment = MapFragment.newInstance(null, this);
+        mapDataInteractor = new MapDataInteractor(context, this);
     }
 
     public Fragment getFragment() {
         return mapFragment;
     }
 
+    // MapDataInteractor.DataReceiver
     @Override
     public void getCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
         mapFragment.setCaches(mapCaches, foundCaches);
+    }
+
+    // MapFragment.Callback
+    @Override
+    public void setCacheFound(String cacheId) {
+
     }
 }

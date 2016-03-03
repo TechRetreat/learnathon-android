@@ -9,18 +9,18 @@ import techretreat.jgzuke.geocaching.R;
 
 public class FoundDataInteractor {
 
+    private Context context;
+
+    private DataReceiver reciever;
     public interface DataReceiver {
         void getFoundCaches(Map<String, FoundCaches.Cache> caches);
     }
 
-    private String userId;
-    private Context context;
-    private DataReceiver reciever;
-
-    public FoundDataInteractor(String userId, Context context, DataReceiver reciever) {
-        this.userId = userId;
+    public FoundDataInteractor(Context context, DataReceiver reciever) {
         this.context = context;
         this.reciever = reciever;
+
+        getFoundCaches();
     }
 
     public void getFoundCaches() {

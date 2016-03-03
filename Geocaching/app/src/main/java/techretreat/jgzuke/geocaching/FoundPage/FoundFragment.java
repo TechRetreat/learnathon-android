@@ -19,27 +19,33 @@ import techretreat.jgzuke.geocaching.UiUtilities;
 
 public class FoundFragment extends Fragment {
 
-    private static final String KEY_USER_ID = "user_id";
-
-    private String userId;
-    private RecyclerView cachesRecycerView;
-    private CacheAdapter cachesRecycerViewAdapter;
+    // Data
     private List<Map.Entry<String, FoundCaches.Cache>> foundCaches;
 
-    public static FoundFragment newInstance(String userId) {
+    // View
+    private RecyclerView cachesRecycerView;
+    private CacheAdapter cachesRecycerViewAdapter;
+
+    // Callback
+    private Callback callback;
+    public interface Callback {
+        void selectCache(String cacheId);
+    }
+
+    public static FoundFragment newInstance(Callback callback) {
         Bundle args = new Bundle();
         FoundFragment fragment = new FoundFragment();
-        args.putString(KEY_USER_ID, userId);
         fragment.setArguments(args);
+        fragment.setCallBack(callback);
         return fragment;
     }
 
-    public FoundFragment() {
+    public void setCallBack(Callback callback) {
+        this.callback = callback;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        userId = getArguments().getString(KEY_USER_ID);
         View rootView = inflater.inflate(R.layout.fragment_found, container, false);
 
         cachesRecycerView = (RecyclerView) rootView.findViewById(R.id.found_caches_recycler_view);

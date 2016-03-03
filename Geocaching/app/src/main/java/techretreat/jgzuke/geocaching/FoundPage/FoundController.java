@@ -1,32 +1,39 @@
 package techretreat.jgzuke.geocaching.FoundPage;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import java.util.Map;
 
-public class FoundController implements FoundDataInteractor.DataReceiver {
+public class FoundController implements FoundDataInteractor.DataReceiver, FoundFragment.Callback {
 
-    private String userId;
-    private Context context;
     private FoundFragment foundFragment;
     private FoundDataInteractor foundDataInteractor;
 
-    public FoundController(String userId, Context context) {
-        this.userId = userId;
+    private Callback callback;
+    public interface Callback {
+        public void viewFoundCacheOnMap(String cacheId);
+    }
 
-        foundFragment = FoundFragment.newInstance(userId);
-        foundDataInteractor = new FoundDataInteractor(userId, context, this);
-
-        foundDataInteractor.getFoundCaches();
+    public FoundController(Context context, Callback callback) {
+        foundFragment = FoundFragment.newInstance(this);
+        foundDataInteractor = new FoundDataInteractor(context, this);
     }
 
     public Fragment getFragment() {
         return foundFragment;
     }
 
+    // FoundDataInteractor.DataReceiver
     @Override
     public void getFoundCaches(Map<String, FoundCaches.Cache> caches) {
         foundFragment.setFoundCaches(caches);
+    }
+
+    // FoundFragment.Callback
+    @Override
+    public void selectCache(String cacheId) {
+
     }
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.Map;
 
+import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.FoundPage.FoundController;
 import techretreat.jgzuke.geocaching.MapPage.MapController;
 import techretreat.jgzuke.geocaching.MapPage.MapFragment;
@@ -22,7 +23,6 @@ import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
 public class MainActivity extends AppCompatActivity {
 
     public static final int MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
-    private static final int NUMBER_OF_TABS = 3;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.settings)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new GeocachingTabSelectedListener());
+        tabLayout.setOnTabSelectedListener(new GeocachingTabSelectedListener(viewPager));
     }
 
     @Override
@@ -70,68 +70,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 break;
-
-        }
-    }
-
-    private class GeocachingTabSelectedListener implements TabLayout.OnTabSelectedListener {
-
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            viewPager.setCurrentItem(tab.getPosition());
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    }
-
-    private class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
-
-        private Map<Integer, Fragment> pageReferenceMap = new HashMap<>(3);
-
-        public GeocachingPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public Fragment getActiveFragment(int index) {
-            return pageReferenceMap.get(index);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = null;
-            switch (position) {
-                case 0:
-                    fragment = new FoundController(userId, MainActivity.this).getFragment();
-                    break;
-                case 1:
-                    fragment = new MapController(userId, MainActivity.this).getFragment();
-                    break;
-                case 2:
-                    fragment = new SettingsController(userId, MainActivity.this).getFragment();
-                    break;
-            }
-            pageReferenceMap.put(position, fragment);
-            return fragment;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            pageReferenceMap.put(position, fragment);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return NUMBER_OF_TABS;
         }
     }
 }
