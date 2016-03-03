@@ -33,9 +33,6 @@ import techretreat.jgzuke.geocaching.UiUtilities;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
-    // Constants
-    private static final String CACHE_ID_TO_SHOW = "cache_id_to_show";
-
     // Data
     private Map<Marker, String> markerToCacheId;
     private Map<String, MapCaches.Cache> mapCaches;
@@ -51,9 +48,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         void setCacheFound(String cacheId);
     }
 
-    public static MapFragment newInstance(@Nullable String cacheId, Callback callback) {
+    public static MapFragment newInstance(Callback callback) {
         Bundle args = new Bundle();
-        args.putString(CACHE_ID_TO_SHOW, cacheId);
         MapFragment fragment = new MapFragment();
         fragment.setArguments(args);
         fragment.setCallBack(callback);
@@ -78,7 +74,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        startingCacheId = getArguments().getString(CACHE_ID_TO_SHOW);
         getMapAsync(this);
     }
 
@@ -201,5 +196,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         return locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+    }
+
+    public void selectCache(String cacheId) {
+        if(map == null || mapCaches == null) {
+            startingCacheId = cacheId;
+        } else {
+            MapCaches.Location location = mapCaches.get(cacheId).location;
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 13));
+        }
     }
 }

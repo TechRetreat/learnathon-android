@@ -80,10 +80,16 @@ public class FoundFragment extends Fragment {
             findTimeTextView = (TextView) itemView.findViewById(R.id.cache_find_time);
         }
 
-        public void bindCache(FoundCaches.Cache cache) {
+        public void bindCache(FoundCaches.Cache cache, final String cacheId) {
             nameTextView.setText(cache.name);
             difficultyTextView.setText(UiUtilities.getDifficultyString(cache.difficulty, getContext()));
             findTimeTextView.setText(UiUtilities.getTimeAgoString(cache.found, getContext()));
+            findTimeTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    callback.selectCache(cacheId);
+                }
+            });
         }
     }
 
@@ -97,7 +103,8 @@ public class FoundFragment extends Fragment {
         @Override
         public void onBindViewHolder(CacheHolder holder, int pos) {
             FoundCaches.Cache cache = foundCaches.get(pos).getValue();
-            holder.bindCache(cache);
+            String cacheId = foundCaches.get(pos).getKey();
+            holder.bindCache(cache, cacheId);
         }
 
         @Override

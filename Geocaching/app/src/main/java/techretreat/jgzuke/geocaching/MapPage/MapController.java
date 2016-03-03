@@ -13,7 +13,7 @@ public class MapController implements MapDataInteractor.DataReceiver, MapFragmen
     private MapDataInteractor mapDataInteractor;
 
     public MapController(Context context) {
-        mapFragment = MapFragment.newInstance(null, this);
+        mapFragment = MapFragment.newInstance(this);
         mapDataInteractor = new MapDataInteractor(context, this);
     }
 

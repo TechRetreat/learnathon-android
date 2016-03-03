@@ -20,7 +20,7 @@ import techretreat.jgzuke.geocaching.MapPage.MapController;
 import techretreat.jgzuke.geocaching.MapPage.MapFragment;
 import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FoundController.Callback {
 
     public static final int MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.settings)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager(), this);
+        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager(), this, this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new GeocachingTabSelectedListener(viewPager));
@@ -64,12 +64,17 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    Fragment fragment = pagerAdapter.getActiveFragment(viewPager.getCurrentItem());
-                    if (fragment instanceof MapFragment) {
-                        ((MapFragment) fragment).updateLocationPermissions();
-                    }
+                    Fragment fragment = pagerAdapter.getActiveFragment(GeocachingPagerAdapter.MAP_TAB);
+                    ((MapFragment) fragment).updateLocationPermissions();
                 }
                 break;
         }
+    }
+
+    @Override
+    public void viewFoundCacheOnMap(String cacheId) {
+        viewPager.setCurrentItem(GeocachingPagerAdapter.MAP_TAB, true);
+        Fragment fragment = pagerAdapter.getActiveFragment(GeocachingPagerAdapter.MAP_TAB);
+        ((MapFragment) fragment).selectCache(cacheId);
     }
 }
