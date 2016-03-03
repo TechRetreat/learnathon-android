@@ -19,6 +19,7 @@ public class FoundController implements FoundDataInteractor.DataReceiver, FoundF
     public FoundController(Context context, Callback callback) {
         foundFragment = FoundFragment.newInstance(this);
         foundDataInteractor = new FoundDataInteractor(context, this);
+        this.callback = callback;
     }
 
     public Fragment getFragment() {
@@ -34,6 +35,6 @@ public class FoundController implements FoundDataInteractor.DataReceiver, FoundF
     // FoundFragment.Callback
     @Override
     public void selectCache(String cacheId) {
-
+        callback.viewFoundCacheOnMap(cacheId);
     }
 }
