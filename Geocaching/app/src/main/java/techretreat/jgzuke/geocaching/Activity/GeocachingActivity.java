@@ -12,7 +12,7 @@ import techretreat.jgzuke.geocaching.FoundPage.FoundController;
 import techretreat.jgzuke.geocaching.MapPage.MapFragment;
 import techretreat.jgzuke.geocaching.R;
 
-public class GeocachingActivity extends AppCompatActivity implements FoundController.Callback {
+public class GeocachingActivity extends AppCompatActivity implements FoundController.ViewCacheOnMapCallback {
 
     public static final int MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
 
@@ -25,19 +25,17 @@ public class GeocachingActivity extends AppCompatActivity implements FoundContro
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager(), this);
+
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.found)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.map)));
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.settings)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        pagerAdapter = new GeocachingPagerAdapter(getSupportFragmentManager(), this, this);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new GeocachingTabSelectedListener(viewPager));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

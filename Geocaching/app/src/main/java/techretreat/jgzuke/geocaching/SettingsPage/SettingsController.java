@@ -7,11 +7,7 @@ public class SettingsController {
 
     private SettingsFragment settingsFragment;
 
-    public SettingsController(Context context) {
-        settingsFragment = SettingsFragment.newInstance();
-    }
-
-    public Fragment getFragment() {
-        return settingsFragment;
+    public SettingsController(Context context, SettingsFragment settingsFragment) {
+        this.settingsFragment = settingsFragment;
     }
 }

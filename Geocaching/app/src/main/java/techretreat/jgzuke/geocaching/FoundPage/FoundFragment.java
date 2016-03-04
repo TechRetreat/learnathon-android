@@ -29,16 +29,21 @@ public class FoundFragment extends Fragment {
         void selectCache(String cacheId);
     }
 
-    public static FoundFragment newInstance(Callback callback) {
+    public static FoundFragment newInstance() {
         Bundle args = new Bundle();
         FoundFragment fragment = new FoundFragment();
         fragment.setArguments(args);
-        fragment.setCallBack(callback);
         return fragment;
     }
 
-    public void setCallBack(Callback callback) {
-        this.callback = callback;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FoundController.ViewCacheOnMapCallback viewCacheOnMapCallback = null;
+        if (getActivity() instanceof FoundController.ViewCacheOnMapCallback) {
+            viewCacheOnMapCallback = (FoundController.ViewCacheOnMapCallback) getActivity();
+        }
+        callback = new FoundController(getContext(), this, viewCacheOnMapCallback);
     }
 
     @Override

@@ -48,16 +48,17 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         void setCacheFound(String cacheId);
     }
 
-    public static MapFragment newInstance(Callback callback) {
+    public static MapFragment newInstance() {
         Bundle args = new Bundle();
         MapFragment fragment = new MapFragment();
         fragment.setArguments(args);
-        fragment.setCallBack(callback);
         return fragment;
     }
 
-    public void setCallBack(Callback callback) {
-        this.callback = callback;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        callback = new MapController(getContext(), this);
     }
 
     public void setMapCaches(Map<String, MapCaches.Cache> mapCaches) {

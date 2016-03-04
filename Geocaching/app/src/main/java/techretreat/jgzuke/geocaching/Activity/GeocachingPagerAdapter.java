@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.Map;
 
-import techretreat.jgzuke.geocaching.FoundPage.FoundController;
-import techretreat.jgzuke.geocaching.MapPage.MapController;
-import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
+import techretreat.jgzuke.geocaching.FoundPage.FoundFragment;
+import techretreat.jgzuke.geocaching.MapPage.MapFragment;
+import techretreat.jgzuke.geocaching.SettingsPage.SettingsFragment;
 
 public class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -22,13 +22,11 @@ public class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
     private static final int NUMBER_OF_TABS = 3;
 
     private Map<Integer, Fragment> pageReferenceMap = new HashMap<>(3);
-    private FoundController.Callback foundControlerCallback;
     private Context context;
 
-    public GeocachingPagerAdapter(FragmentManager fm, Context context, FoundController.Callback foundControlerCallback) {
+    public GeocachingPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
-        this.foundControlerCallback = foundControlerCallback;
     }
 
     public Fragment getActiveFragment(int index) {
@@ -40,13 +38,13 @@ public class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case FOUND_TAB:
-                fragment = new FoundController(context, foundControlerCallback).getFragment();
+                fragment = FoundFragment.newInstance();
                 break;
             case MAP_TAB:
-                fragment = new MapController(context).getFragment();
+                fragment = MapFragment.newInstance();
                 break;
             case SETTINGS_TAB:
-                fragment = new SettingsController(context).getFragment();
+                fragment = SettingsFragment.newInstance();
                 break;
         }
         pageReferenceMap.put(position, fragment);
