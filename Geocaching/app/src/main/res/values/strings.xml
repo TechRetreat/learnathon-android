@@ -21,4 +21,7 @@
     <string name="multi_dialog_title">Dialog</string>
     <string name="multi_dialog_default">One</string>
 
+    <string name="map_settings_section_title">Map settings</string>
+    <string name="yes_no_title">Yes/No</string>
+    <string name="yes_no_description">Yes or No</string>
 </resources>

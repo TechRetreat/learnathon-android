@@ -28,9 +28,6 @@ public class MainActivity extends AppCompatActivity implements FoundController.C
     private TabLayout tabLayout;
     private GeocachingPagerAdapter pagerAdapter;
 
-    //TODO not this
-    private String userId = "test";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
