@@ -60,8 +60,17 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         this.callback = callback;
     }
 
-    public void setCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
+    public void setMapCaches(Map<String, MapCaches.Cache> mapCaches) {
         this.mapCaches = mapCaches;
+        if (map != null) {
+            makeMarkers();
+            if (startingCacheId != null) {
+                tryZoomToStartingLocation();
+            }
+        }
+    }
+
+    public void setFoundCaches(Map<String, FoundCaches.Cache> foundCaches) {
         this.foundCaches = foundCaches;
         if (map != null) {
             makeMarkers();

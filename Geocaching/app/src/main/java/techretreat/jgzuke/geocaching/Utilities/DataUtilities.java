@@ -9,7 +9,11 @@ import java.io.InputStream;
 
 public class DataUtilities {
 
-    public static <T> T getResponse(Context context, Class<T> type, int jsonResId) {
+    public interface Receiver<T> {
+        void getResults(T results);
+    }
+
+    public static <T> void getResponse(Context context, Class<T> type, int jsonResId, Receiver<T> receiver) {
         //TODO: take in api call instead, run async
         try {
             InputStream is = context.getResources().openRawResource(jsonResId);
@@ -21,10 +25,10 @@ public class DataUtilities {
 
             Gson gson = new Gson();
 
-            return gson.fromJson(json, type);
+            receiver.getResults(gson.fromJson(json, type));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return null;
+        receiver.getResults(null);
     }
 }

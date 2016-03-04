@@ -7,13 +7,19 @@ import java.util.Map;
 import techretreat.jgzuke.geocaching.Utilities.DataUtilities;
 import techretreat.jgzuke.geocaching.R;
 
-public class FoundDataInteractor {
+public class FoundDataInteractor implements DataUtilities.Receiver<FoundCaches> {
 
     // System objects
     private Context context;
 
     // Callback
     private DataReceiver reciever;
+
+    @Override
+    public void getResults(FoundCaches results) {
+
+    }
+
     public interface DataReceiver {
         void getFoundCaches(Map<String, FoundCaches.Cache> caches);
     }
@@ -22,11 +28,6 @@ public class FoundDataInteractor {
         this.context = context;
         this.reciever = reciever;
 
-        getFoundCaches();
-    }
-
-    public void getFoundCaches() {
-        FoundCaches foundCaches = DataUtilities.getResponse(context, FoundCaches.class, R.raw.caches_found);
-        reciever.getFoundCaches(foundCaches.caches);
+        DataUtilities.getResponse(context, FoundCaches.class, R.raw.caches_found, this);
     }
 }
