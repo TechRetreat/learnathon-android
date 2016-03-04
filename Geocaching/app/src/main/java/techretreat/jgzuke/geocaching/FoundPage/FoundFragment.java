@@ -10,17 +10,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import techretreat.jgzuke.geocaching.R;
-import techretreat.jgzuke.geocaching.UiUtilities;
+import techretreat.jgzuke.geocaching.Utilities.UiUtilities;
 
 public class FoundFragment extends Fragment {
-
-    // Data
-    private List<Map.Entry<String, FoundCaches.Cache>> foundCaches;
 
     // View
     private RecyclerView cachesRecycerView;
@@ -28,6 +24,7 @@ public class FoundFragment extends Fragment {
 
     // Callback
     private Callback callback;
+
     public interface Callback {
         void selectCache(String cacheId);
     }
@@ -49,23 +46,14 @@ public class FoundFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_found, container, false);
 
         cachesRecycerView = (RecyclerView) rootView.findViewById(R.id.found_caches_recycler_view);
-        setUpRecyclerView();
+        cachesRecycerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return rootView;
     }
 
-    public void setUpRecyclerView() {
-        cachesRecycerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        cachesRecycerViewAdapter = new CacheAdapter();
-        cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
-    }
-
     public void setFoundCaches(Map<String, FoundCaches.Cache> caches) {
-        foundCaches = new ArrayList<>(caches.size());
-        foundCaches.addAll(caches.entrySet());
-        if(cachesRecycerViewAdapter != null) {
-            cachesRecycerViewAdapter.notifyDataSetChanged();
-        }
+        cachesRecycerViewAdapter = new CacheAdapter(caches);
+        cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
     }
 
     private class CacheHolder extends RecyclerView.ViewHolder {
@@ -94,6 +82,15 @@ public class FoundFragment extends Fragment {
     }
 
     private class CacheAdapter extends RecyclerView.Adapter<CacheHolder> {
+
+        // Data
+        private List<Map.Entry<String, FoundCaches.Cache>> foundCaches;
+
+        public CacheAdapter(Map<String, FoundCaches.Cache> caches) {
+            foundCaches = new ArrayList<>(caches.size());
+            foundCaches.addAll(caches.entrySet());
+        }
+
         @Override
         public CacheHolder onCreateViewHolder(ViewGroup parent, int pos) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_found_cache, parent, false);
@@ -109,7 +106,7 @@ public class FoundFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(foundCaches == null) {
+            if (foundCaches == null) {
                 return 0;
             }
             return foundCaches.size();

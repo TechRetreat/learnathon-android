@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -27,9 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
-import techretreat.jgzuke.geocaching.MainActivity;
+import techretreat.jgzuke.geocaching.MainActivity.MainActivity;
 import techretreat.jgzuke.geocaching.R;
-import techretreat.jgzuke.geocaching.UiUtilities;
+import techretreat.jgzuke.geocaching.Utilities.UiUtilities;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
@@ -44,6 +43,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     // Callback
     private Callback callback;
+
     public interface Callback {
         void setCacheFound(String cacheId);
     }
@@ -63,7 +63,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void setCaches(Map<String, MapCaches.Cache> mapCaches, Map<String, FoundCaches.Cache> foundCaches) {
         this.mapCaches = mapCaches;
         this.foundCaches = foundCaches;
-        if(map != null) {
+        if (map != null) {
             makeMarkers();
             if (startingCacheId != null) {
                 tryZoomToStartingLocation();
@@ -82,10 +82,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         map = googleMap;
         setMapSettings();
         setMapInfoWindowAdapter();
-        if(mapCaches != null) {
+        if (mapCaches != null) {
             makeMarkers();
         }
-        if(startingCacheId == null || mapCaches != null) {
+        if (startingCacheId == null || mapCaches != null) {
             tryZoomToStartingLocation();
         }
     }
@@ -199,7 +199,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     public void selectCache(String cacheId) {
-        if(map == null || mapCaches == null) {
+        if (map == null || mapCaches == null) {
             startingCacheId = cacheId;
         } else {
             MapCaches.Location location = mapCaches.get(cacheId).location;

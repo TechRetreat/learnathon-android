@@ -1,4 +1,4 @@
-package techretreat.jgzuke.geocaching;
+package techretreat.jgzuke.geocaching.MainActivity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

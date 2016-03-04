@@ -4,13 +4,15 @@ import android.content.Context;
 
 import java.util.Map;
 
-import techretreat.jgzuke.geocaching.DataUtilities;
+import techretreat.jgzuke.geocaching.Utilities.DataUtilities;
 import techretreat.jgzuke.geocaching.R;
 
 public class FoundDataInteractor {
 
+    // System objects
     private Context context;
 
+    // Callback
     private DataReceiver reciever;
     public interface DataReceiver {
         void getFoundCaches(Map<String, FoundCaches.Cache> caches);

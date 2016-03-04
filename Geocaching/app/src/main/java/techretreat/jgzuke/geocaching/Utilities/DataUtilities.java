@@ -1,4 +1,4 @@
-package techretreat.jgzuke.geocaching;
+package techretreat.jgzuke.geocaching.Utilities;
 
 import android.content.Context;
 
@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DataUtilities {
-
+    
     public static <T> T getResponse(Context context, Class<T> type, int jsonResId) {
         //TODO: take in api call instead, run async
         try {

@@ -3,11 +3,13 @@
     <PreferenceCategory
         android:key="yes_no_multi_settings"
         android:title="@string/yes_no_section_title">
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="yes_no"
             android:summary="@string/yes_no_description"
             android:title="@string/yes_no_title" />
+
         <ListPreference
             android:defaultValue="@string/multi_dialog_default"
             android:dependency="yes_no"
@@ -21,32 +23,29 @@
     <PreferenceCategory
         android:key="map_settings"
         android:title="@string/map_settings_section_title">
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="map_settings_compass_enabled"
-            android:summary="@string/yes_no_description"
-            android:title="@string/yes_no_title" />
+            android:summary="@string/compass_enabled_description"
+            android:title="@string/compass_enabled_title" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="map_settings_zoom_buttons_enabled"
-            android:summary="@string/yes_no_description"
-            android:title="@string/yes_no_title" />
+            android:summary="@string/zoom_enabled_description"
+            android:title="@string/zoom_enabled_title" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="map_settings_location_enabled"
-            android:summary="@string/yes_no_description"
-            android:title="@string/yes_no_title" />
+            android:summary="@string/location_enabled_description"
+            android:title="@string/location_enabled_title" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="map_settings_toolbar_enabled"
-            android:summary="@string/yes_no_description"
-            android:title="@string/yes_no_title" />
-
-
-        settings.setCompassEnabled(true);
-        settings.setMyLocationButtonEnabled(true);
-        settings.setZoomControlsEnabled(true);
-        settings.setMapToolbarEnabled(false);
-
+            android:summary="@string/toolbar_enabled_description"
+            android:title="@string/toolbar_enabled_title" />
     </PreferenceCategory>
 </PreferenceScreen>

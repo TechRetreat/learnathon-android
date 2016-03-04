@@ -1,24 +1,15 @@
-package techretreat.jgzuke.geocaching;
+package techretreat.jgzuke.geocaching.MainActivity;
 
 import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.FoundPage.FoundController;
-import techretreat.jgzuke.geocaching.MapPage.MapController;
 import techretreat.jgzuke.geocaching.MapPage.MapFragment;
-import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
+import techretreat.jgzuke.geocaching.R;
 
 public class MainActivity extends AppCompatActivity implements FoundController.Callback {
 

@@ -1,16 +1,16 @@
 package techretreat.jgzuke.geocaching.MapPage;
 
-
 import android.content.Context;
 
 import java.util.Map;
 
-import techretreat.jgzuke.geocaching.DataUtilities;
+import techretreat.jgzuke.geocaching.Utilities.DataUtilities;
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.R;
 
 public class MapDataInteractor {
 
+    // System objects
     private Context context;
 
     private DataReceiver reciever;

@@ -22,6 +22,12 @@
     <string name="multi_dialog_default">One</string>
 
     <string name="map_settings_section_title">Map settings</string>
-    <string name="yes_no_title">Yes/No</string>
-    <string name="yes_no_description">Yes or No</string>
+    <string name="compass_enabled_title">Compass Enabled</string>
+    <string name="compass_enabled_description">Show compass in upper right corner of screen</string>
+    <string name="zoom_enabled_title">Zoom Buttons Enabled</string>
+    <string name="zoom_enabled_description">Show on screen zoom control buttons</string>
+    <string name="location_enabled_title">Location Enabled</string>
+    <string name="location_enabled_description">Show button to zoom to current location</string>
+    <string name="toolbar_enabled_title">Toolbar Enabled</string>
+    <string name="toolbar_enabled_description">Show directions toolbar when you select a cache</string>
 </resources>

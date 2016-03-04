@@ -1,7 +1,9 @@
-package techretreat.jgzuke.geocaching;
+package techretreat.jgzuke.geocaching.Utilities;
 
 import android.content.Context;
 import android.text.format.DateUtils;
+
+import techretreat.jgzuke.geocaching.R;
 
 public class UiUtilities {
 
