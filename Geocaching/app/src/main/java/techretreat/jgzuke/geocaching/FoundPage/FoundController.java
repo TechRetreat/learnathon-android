@@ -3,8 +3,6 @@ package techretreat.jgzuke.geocaching.FoundPage;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import java.util.Map;
-
 import techretreat.jgzuke.geocaching.R;
 import techretreat.jgzuke.geocaching.Utilities.DataUtilities;
 import techretreat.jgzuke.geocaching.Utilities.DataUtilities.Receiver;
@@ -15,7 +13,7 @@ public class FoundController implements FoundFragment.Callback {
 
     private Callback callback;
     public interface Callback {
-        public void viewFoundCacheOnMap(String cacheId);
+        void viewFoundCacheOnMap(String cacheId);
     }
 
     public FoundController(Context context, Callback callback) {

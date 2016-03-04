@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
-import techretreat.jgzuke.geocaching.MainActivity.MainActivity;
+import techretreat.jgzuke.geocaching.Activity.GeocachingActivity;
 import techretreat.jgzuke.geocaching.R;
 import techretreat.jgzuke.geocaching.Utilities.UiUtilities;
 
@@ -199,7 +199,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            getActivity().requestPermissions(permissions, MainActivity.MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE);
+            getActivity().requestPermissions(permissions, GeocachingActivity.MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE);
             return null;
         }
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);

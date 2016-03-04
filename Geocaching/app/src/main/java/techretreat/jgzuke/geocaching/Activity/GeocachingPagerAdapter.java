@@ -1,4 +1,4 @@
-package techretreat.jgzuke.geocaching.MainActivity;
+package techretreat.jgzuke.geocaching.Activity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -15,6 +15,7 @@ import techretreat.jgzuke.geocaching.SettingsPage.SettingsController;
 
 public class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
 
+    // Constants
     public static final int FOUND_TAB = 0;
     public static final int MAP_TAB = 1;
     public static final int SETTINGS_TAB = 2;
@@ -38,13 +39,13 @@ public class GeocachingPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = null;
         switch (position) {
-            case 0:
+            case FOUND_TAB:
                 fragment = new FoundController(context, foundControlerCallback).getFragment();
                 break;
-            case 1:
+            case MAP_TAB:
                 fragment = new MapController(context).getFragment();
                 break;
-            case 2:
+            case SETTINGS_TAB:
                 fragment = new SettingsController(context).getFragment();
                 break;
         }

@@ -14,7 +14,7 @@ public class DataUtilities {
     }
 
     public static <T> void getResponse(Context context, Class<T> type, int jsonResId, Receiver<T> receiver) {
-        //TODO: take in api call instead, run async
+        // TODO: call api instead, run async
         try {
             InputStream is = context.getResources().openRawResource(jsonResId);
             int size = is.available();

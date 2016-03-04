@@ -1,4 +1,4 @@
-package techretreat.jgzuke.geocaching.MainActivity;
+package techretreat.jgzuke.geocaching.Activity;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
