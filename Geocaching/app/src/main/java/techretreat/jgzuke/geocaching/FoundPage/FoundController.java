@@ -9,14 +9,15 @@ public class FoundController implements FoundFragment.Callback {
 
     private FoundFragment foundFragment;
 
-    private ViewCacheOnMapCallback viewCacheOnMapCallback;
-    public interface ViewCacheOnMapCallback {
-        void viewFoundCacheOnMap(String cacheId);
+    private GoToMapCallback goToMapCallback;
+
+    public interface GoToMapCallback {
+        void onGoToMap();
     }
 
-    public FoundController(Context context, FoundFragment fragment, ViewCacheOnMapCallback callback) {
+    public FoundController(Context context, FoundFragment fragment, GoToMapCallback callback) {
         foundFragment = fragment;
-        viewCacheOnMapCallback = callback;
+        goToMapCallback = callback;
 
         DataUtilities.getFoundCaches(context, new Receiver<FoundCaches>() {
             @Override
@@ -33,10 +34,14 @@ public class FoundController implements FoundFragment.Callback {
 
     // FoundFragment.Callback
     @Override
-    public void selectCache(String cacheId) {
-        if(viewCacheOnMapCallback == null) {
-            return;
+    public void onGoToMap() {
+        if (goToMapCallback != null) {
+            goToMapCallback.onGoToMap();
         }
-        viewCacheOnMapCallback.viewFoundCacheOnMap(cacheId);
+    }
+
+    @Override
+    public void onSelectCache(String cacheId) {
+
     }
 }

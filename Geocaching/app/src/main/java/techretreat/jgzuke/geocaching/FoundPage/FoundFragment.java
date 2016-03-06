@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,12 +22,15 @@ public class FoundFragment extends Fragment {
     // View
     private RecyclerView cachesRecycerView;
     private CacheAdapter cachesRecycerViewAdapter;
+    private Button viewOnMapButton;
 
     // Callback
     private Callback callback;
 
     public interface Callback {
-        void selectCache(String cacheId);
+        void onGoToMap();
+
+        void onSelectCache(String cacheId);
     }
 
     public static FoundFragment newInstance() {
@@ -39,11 +43,6 @@ public class FoundFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FoundController.ViewCacheOnMapCallback viewCacheOnMapCallback = null;
-        if (getActivity() instanceof FoundController.ViewCacheOnMapCallback) {
-            viewCacheOnMapCallback = (FoundController.ViewCacheOnMapCallback) getActivity();
-        }
-        callback = new FoundController(getContext(), this, viewCacheOnMapCallback);
     }
 
     @Override
@@ -52,6 +51,19 @@ public class FoundFragment extends Fragment {
 
         cachesRecycerView = (RecyclerView) rootView.findViewById(R.id.found_caches_recycler_view);
         cachesRecycerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        viewOnMapButton = (Button) rootView.findViewById(R.id.view_on_map_button);
+        viewOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.onGoToMap();
+            }
+        });
+
+        FoundController.GoToMapCallback goToMapCallback = null;
+        if (getActivity() instanceof FoundController.GoToMapCallback) {
+            goToMapCallback = (FoundController.GoToMapCallback) getActivity();
+        }
+        callback = new FoundController(getContext(), this, goToMapCallback);
 
         return rootView;
     }
@@ -80,7 +92,7 @@ public class FoundFragment extends Fragment {
             findTimeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    callback.selectCache(cacheId);
+                    callback.onSelectCache(cacheId);
                 }
             });
         }

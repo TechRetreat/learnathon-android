@@ -12,7 +12,7 @@ import techretreat.jgzuke.geocaching.FoundPage.FoundController;
 import techretreat.jgzuke.geocaching.MapPage.MapFragment;
 import techretreat.jgzuke.geocaching.R;
 
-public class GeocachingActivity extends AppCompatActivity implements FoundController.ViewCacheOnMapCallback {
+public class GeocachingActivity extends AppCompatActivity implements FoundController.GoToMapCallback {
 
     public static final int MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
 
@@ -59,9 +59,7 @@ public class GeocachingActivity extends AppCompatActivity implements FoundContro
     }
 
     @Override
-    public void viewFoundCacheOnMap(String cacheId) {
+    public void onGoToMap() {
         viewPager.setCurrentItem(GeocachingPagerAdapter.MAP_TAB, true);
-        Fragment fragment = pagerAdapter.getActiveFragment(GeocachingPagerAdapter.MAP_TAB);
-        ((MapFragment) fragment).selectCache(cacheId);
     }
 }

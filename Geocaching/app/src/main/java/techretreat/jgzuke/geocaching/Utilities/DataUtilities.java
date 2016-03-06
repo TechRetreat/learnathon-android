@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
@@ -98,34 +99,46 @@ public class DataUtilities {
     }
 
     public static <T> void getResponseFromNetwork(Context context, Class<T> type, String path, Receiver<T> receiver) {
-        new NetworkCall<>(receiver, type).execute(path);
+        new NetworkCall<>(context, receiver, type).execute(path);
     }
 
     private static class NetworkCall<T> extends AsyncTask<String, Void, T> {
 
-        Receiver<T> receiver;
-        Class<T> type;
+        private Context context;
+        private Receiver<T> receiver;
+        private Class<T> type;
 
-        public NetworkCall(Receiver<T> receiver, Class<T> type) {
+        public NetworkCall(Context context, Receiver<T> receiver, Class<T> type) {
+            this.context = context;
             this.receiver = receiver;
             this.type = type;
         }
 
         @Override
         protected T doInBackground(String... params) {
-            String urlString = params[0]; // URL to call
+            String path = params[0]; // URL to call
             InputStream in;
 
+            //TODO mod path to real one
+
             try {
-                URL url = new URL(urlString);
+                URL url = new URL(path);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 in = new BufferedInputStream(urlConnection.getInputStream());
             } catch (Exception e) {
                 return null;
             }
 
+            String json = in.toString();
+            if (TextUtils.isEmpty(json)) {
+                return null;
+            }
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putString(path, json).apply();
+
             Gson gson = new Gson();
-            return gson.fromJson(in.toString(), type);
+            return gson.fromJson(json, type);
         }
 
         @Override

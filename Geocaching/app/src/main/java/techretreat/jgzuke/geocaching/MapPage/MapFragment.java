@@ -28,6 +28,7 @@ import java.util.Map;
 import techretreat.jgzuke.geocaching.FoundPage.FoundCaches;
 import techretreat.jgzuke.geocaching.Activity.GeocachingActivity;
 import techretreat.jgzuke.geocaching.R;
+import techretreat.jgzuke.geocaching.Utilities.PreferenceUtilities;
 import techretreat.jgzuke.geocaching.Utilities.UiUtilities;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
@@ -36,7 +37,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Map<Marker, String> markerToCacheId;
     private Map<String, MapCaches.Cache> mapCaches;
     private Map<String, FoundCaches.Cache> foundCaches;
-    private String startingCacheId;
 
     // View
     private GoogleMap map;
@@ -63,21 +63,15 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void setMapCaches(Map<String, MapCaches.Cache> mapCaches) {
         this.mapCaches = mapCaches;
-        if (map != null) {
+        if (map != null && foundCaches != null) {
             makeMarkers();
-            if (startingCacheId != null) {
-                tryZoomToStartingLocation();
-            }
         }
     }
 
     public void setFoundCaches(Map<String, FoundCaches.Cache> foundCaches) {
         this.foundCaches = foundCaches;
-        if (map != null) {
+        if (map != null && mapCaches != null) {
             makeMarkers();
-            if (startingCacheId != null) {
-                tryZoomToStartingLocation();
-            }
         }
     }
 
@@ -92,21 +86,22 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         map = googleMap;
         setMapSettings();
         setMapInfoWindowAdapter();
-        if (mapCaches != null) {
+        tryZoomToStartingLocation();
+        if (mapCaches != null && foundCaches != null) {
             makeMarkers();
-        }
-        if (startingCacheId == null || mapCaches != null) {
-            tryZoomToStartingLocation();
         }
     }
 
     private void setMapSettings() {
-        //TODO: put these in setings to allow user to change
+        boolean compassEnabled = PreferenceUtilities.getCompassEnabled(getContext());
+        boolean locationEnabled = PreferenceUtilities.getLocationEnabled(getContext());
+        boolean zoomControlsEnabled = PreferenceUtilities.getZoomButtonsEnabled(getContext());
+        boolean toolbarEnabled = PreferenceUtilities.getToolbarEnabled(getContext());
         UiSettings settings = map.getUiSettings();
-        settings.setCompassEnabled(true);
-        settings.setMyLocationButtonEnabled(true);
-        settings.setZoomControlsEnabled(true);
-        settings.setMapToolbarEnabled(false);
+        settings.setCompassEnabled(compassEnabled);
+        settings.setMyLocationButtonEnabled(locationEnabled);
+        settings.setZoomControlsEnabled(zoomControlsEnabled);
+        settings.setMapToolbarEnabled(toolbarEnabled);
     }
 
     private void setMapInfoWindowAdapter() {
@@ -184,14 +179,9 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     private void tryZoomToStartingLocation() {
-        if (startingCacheId != null) {
-            MapCaches.Location location = mapCaches.get(startingCacheId).location;
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 13));
-        } else {
-            Location location = getLocationOrRequestPermissions();
-            if (location != null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-            }
+        Location location = getLocationOrRequestPermissions();
+        if (location != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
         }
     }
 
@@ -206,14 +196,5 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         return locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-    }
-
-    public void selectCache(String cacheId) {
-        if (map == null || mapCaches == null) {
-            startingCacheId = cacheId;
-        } else {
-            MapCaches.Location location = mapCaches.get(cacheId).location;
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.latitude, location.longitude), 13));
-        }
     }
 }
