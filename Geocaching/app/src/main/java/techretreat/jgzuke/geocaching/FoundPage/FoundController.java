@@ -20,8 +20,13 @@ public class FoundController implements FoundFragment.Callback {
 
         DataUtilities.getFoundCaches(context, new Receiver<FoundCaches>() {
             @Override
-            public void getResults(FoundCaches results) {
+            public void onResults(FoundCaches results) {
                 foundFragment.setFoundCaches(results.caches);
+            }
+
+            @Override
+            public void onError() {
+
             }
         });
     }

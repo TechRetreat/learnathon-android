@@ -15,14 +15,24 @@ public class MapController implements MapFragment.Callback {
 
         DataUtilities.getMapCaches(context, new Receiver<MapCaches>() {
             @Override
-            public void getResults(MapCaches results) {
+            public void onResults(MapCaches results) {
                 mapFragment.setMapCaches(results.caches);
+            }
+
+            @Override
+            public void onError() {
+
             }
         });
         DataUtilities.getFoundCaches(context, new Receiver<FoundCaches>() {
             @Override
-            public void getResults(FoundCaches results) {
+            public void onResults(FoundCaches results) {
                 mapFragment.setFoundCaches(results.caches);
+            }
+
+            @Override
+            public void onError() {
+
             }
         });
     }

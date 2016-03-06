@@ -13,22 +13,22 @@ public class PreferenceUtilities {
     private static final String TOOLBAR_ENABLED = "map_settings_compass_enabled";
 
     public static boolean getCompassEnabled(Context context) {
-        return getPref(context).getBoolean(COMPASS_ENABLED, true);
+        return getPreferences(context).getBoolean(COMPASS_ENABLED, true);
     }
 
     public static boolean getZoomButtonsEnabled(Context context) {
-        return getPref(context).getBoolean(ZOOM_BUTTONS_ENABLED, true);
+        return getPreferences(context).getBoolean(ZOOM_BUTTONS_ENABLED, true);
     }
 
     public static boolean getLocationEnabled(Context context) {
-        return getPref(context).getBoolean(LOCATION_ENABLED, true);
+        return getPreferences(context).getBoolean(LOCATION_ENABLED, true);
     }
 
     public static boolean getToolbarEnabled(Context context) {
-        return getPref(context).getBoolean(TOOLBAR_ENABLED, true);
+        return getPreferences(context).getBoolean(TOOLBAR_ENABLED, true);
     }
 
-    public static SharedPreferences getPref(Context context) {
+    private static SharedPreferences getPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 }
