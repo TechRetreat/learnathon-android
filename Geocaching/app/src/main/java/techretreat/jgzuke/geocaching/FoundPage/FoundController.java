@@ -2,7 +2,6 @@ package techretreat.jgzuke.geocaching.FoundPage;
 
 import android.content.Context;
 
-import techretreat.jgzuke.geocaching.R;
 import techretreat.jgzuke.geocaching.Utilities.DataUtilities;
 import techretreat.jgzuke.geocaching.Utilities.DataUtilities.Receiver;
 
@@ -19,7 +18,7 @@ public class FoundController implements FoundFragment.Callback {
         foundFragment = fragment;
         viewCacheOnMapCallback = callback;
 
-        DataUtilities.getResponse(context, FoundCaches.class, R.raw.caches_found, new Receiver<FoundCaches>() {
+        DataUtilities.getFoundCaches(context, new Receiver<FoundCaches>() {
             @Override
             public void getResults(FoundCaches results) {
                 foundFragment.setFoundCaches(results.caches);
