@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Geocaching</string>
-    <string name="button_title">Button Text</string>
+    <string name="button_title">Click Me</string>
 </resources>
