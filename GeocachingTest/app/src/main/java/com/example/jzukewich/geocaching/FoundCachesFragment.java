@@ -48,6 +48,13 @@ public class FoundCachesFragment extends Fragment {
 
         cachesRecycerView = (RecyclerView) rootView.findViewById(R.id.found_caches_recycler_view);
         cachesRecycerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        DataUtilities.getResponseTest(getContext(), new DataUtilities.Receiver() {
+            @Override
+            public void onResults(FoundCaches results) {
+                // Do something with the results
+            }
+        });
         ArrayList<String> itemNames = new ArrayList<>();
         itemNames.add("Cache 1");
         itemNames.add("Cache 2");
