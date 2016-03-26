@@ -1,10 +1,14 @@
 package com.example.jzukewich.geocaching;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,8 +27,8 @@ import java.util.Map;
  */
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
-    private Map<String, MapCaches.Cache> mapCaches;
-    private Map<String, FoundCaches.Cache> foundCaches;
+    private Map<String, MapCache> mapCaches;
+    private Map<String, FoundCache> foundCaches;
 
     // We will use this Object to control the map shown on the screen
     private GoogleMap googleMap;
@@ -47,21 +51,22 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         DataUtilities.getFoundCaches(getContext(), new DataUtilities.FoundCachesReceiver() {
             @Override
-            public void onResults(FoundCaches results) {
-                foundCaches = results.caches;
+            public void onResults(Map<String, FoundCache> results) {
+                foundCaches = results;
             }
         });
         DataUtilities.getMapCaches(getContext(), new DataUtilities.MapCachesReceiver() {
             @Override
-            public void onResults(MapCaches results) {
-                mapCaches = results.caches;
+            public void onResults(Map<String, MapCache> results) {
+                mapCaches = results;
                 makeMarkers();
+                setMarkerPopupAdapter();
             }
         });
     }
 
     private void makeMarkers() {
-        for (MapCaches.Cache cache : mapCaches.values()) {
+        for (MapCache cache : mapCaches.values()) {
             LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
             boolean hasBeenFound = foundCaches.containsKey(cache.name);
             float iconColor = hasBeenFound? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
@@ -70,6 +75,63 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                     .icon(BitmapDescriptorFactory.defaultMarker(iconColor))
                     .title(cache.name));
         }
+    }
+
+    private void setMarkerPopupAdapter() {
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View infoView = getLayoutInflater(null).inflate(R.layout.marker_click_popup, null);
+                TextView name = (TextView) infoView.findViewById(R.id.name);
+                TextView description = (TextView) infoView.findViewById(R.id.difficulty);
+
+                final String cacheName = marker.getTitle();
+                MapCache cache = mapCaches.get(cacheName);
+                name.setText(cache.name);
+                description.setText(FormattingUtilities.getDifficultyString(cache.difficulty, getContext()));
+                return infoView;
+            }
+        });
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String cacheName = marker.getTitle();
+                openViewDetailsDialog(cacheName);
+            }
+        });
+    }
+
+    private void openViewDetailsDialog(String cacheName) {
+        View dialogView = getLayoutInflater(null).inflate(R.layout.see_more_dialog, null);
+        TextView name = (TextView) dialogView.findViewById(R.id.cache_name);
+        TextView difficulty = (TextView) dialogView.findViewById(R.id.cache_difficulty);
+        TextView description = (TextView) dialogView.findViewById(R.id.cache_description);
+        Button found = (Button) dialogView.findViewById(R.id.cache_found);
+
+        MapCache cache = mapCaches.get(cacheName);
+        name.setText(cache.name);
+        difficulty.setText(FormattingUtilities.getDifficultyString(cache.difficulty, getContext()));
+        description.setText(cache.description);
+
+        if (foundCaches.containsKey(cacheName)) {
+            FoundCache foundCache = foundCaches.get(cacheName);
+            found.setClickable(false);
+            found.setText(FormattingUtilities.getTimeAgoString(foundCache.found, getContext()));
+        } else {
+            found.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Set this cache to found
+                }
+            });
+        }
+
+        new AlertDialog.Builder(getContext()).setView(dialogView).create().show();
     }
 
     private void zoomToUserLocation() {

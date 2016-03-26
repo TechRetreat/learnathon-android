@@ -51,8 +51,8 @@ public class FoundCachesFragment extends Fragment {
 
         DataUtilities.getFoundCaches(getContext(), new DataUtilities.FoundCachesReceiver() {
             @Override
-            public void onResults(FoundCaches results) {
-                List<FoundCaches.Cache> caches = new ArrayList(results.caches.values());
+            public void onResults(Map<String, FoundCache> results) {
+                List<FoundCache> caches = new ArrayList(results.values());
                 cachesRecycerViewAdapter = new CacheAdapter(caches);
                 cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
             }
@@ -73,7 +73,7 @@ public class FoundCachesFragment extends Fragment {
             findTimeTextView = (TextView) itemView.findViewById(R.id.cache_find_time);
         }
 
-        public void bindCache(FoundCaches.Cache cache) {
+        public void bindCache(FoundCache cache) {
             nameTextView.setText(cache.name);
             difficultyTextView.setText(FormattingUtilities.getDifficultyString(cache.difficulty, getContext()));
             findTimeTextView.setText(FormattingUtilities.getTimeAgoString(cache.found, getContext()));
@@ -82,9 +82,9 @@ public class FoundCachesFragment extends Fragment {
 
     private class CacheAdapter extends RecyclerView.Adapter<CacheHolder> {
 
-        private List<FoundCaches.Cache> items;
+        private List<FoundCache> items;
 
-        public CacheAdapter(List<FoundCaches.Cache> items) {
+        public CacheAdapter(List<FoundCache> items) {
             this.items = items;
         }
 
@@ -96,7 +96,7 @@ public class FoundCachesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CacheHolder holder, int pos) {
-            FoundCaches.Cache item = items.get(pos);
+            FoundCache item = items.get(pos);
             holder.bindCache(item);
         }
 

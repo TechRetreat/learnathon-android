@@ -84,7 +84,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         setMapSettings();
-        setMapInfoWindowAdapter();
+        setMarkerPopupAdapter();
         tryZoomToStartingLocation();
         if (mapCaches != null && foundCaches != null) {
             makeMarkers();
@@ -103,7 +103,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         settings.setMapToolbarEnabled(toolbarEnabled);
     }
 
-    private void setMapInfoWindowAdapter() {
+    private void setMarkerPopupAdapter() {
         map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker arg0) {
@@ -128,8 +128,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String cacheId = marker.getTitle();
-                MapCaches.Cache mapCache = mapCaches.get(cacheId);
-                FoundCaches.Cache foundCache = foundCaches.get(cacheId);
                 openViewDetailsDialog(cacheId, mapCache, foundCache);
             }
         });

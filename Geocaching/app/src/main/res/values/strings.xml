@@ -9,7 +9,7 @@
 
     <!-- Map page -->
     <string name="map">Map</string>
-    <string name="marker_info_window_see_details">See Details<xliff:g>&#8230;</xliff:g></string>
+    <string name="marker_info_window_see_details">See Details…</string>
     <string name="difficulty_out_of_five">Difficulty %1$d of 5</string>
     <string name="found_it_button_text">Found it!</string>
 

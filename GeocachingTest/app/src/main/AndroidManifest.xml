@@ -29,6 +29,6 @@
         <!-- Put your Maps API key here -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDxoz5XUfMQEAcarCoouEQ_T40KEQS58kk" />
+            android:value="" />
     </application>
 </manifest>
