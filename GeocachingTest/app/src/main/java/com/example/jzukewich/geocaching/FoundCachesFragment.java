@@ -52,49 +52,51 @@ public class FoundCachesFragment extends Fragment {
         DataUtilities.getResponseTest(getContext(), new DataUtilities.Receiver() {
             @Override
             public void onResults(FoundCaches results) {
-                // Do something with the results
+                List<FoundCaches.Cache> caches = new ArrayList(results.caches.values());
+                cachesRecycerViewAdapter = new CacheAdapter(caches);
+                cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
             }
         });
-        ArrayList<String> itemNames = new ArrayList<>();
-        itemNames.add("Cache 1");
-        itemNames.add("Cache 2");
-        itemNames.add("Cache 3");
-        cachesRecycerViewAdapter = new CacheAdapter(itemNames);
-        cachesRecycerView.setAdapter(cachesRecycerViewAdapter);
 
         return rootView;
     }
 
     private class CacheHolder extends RecyclerView.ViewHolder {
         private final TextView nameTextView;
+        private final TextView difficultyTextView;
+        private final TextView findTimeTextView;
 
-        public CacheHolder(TextView itemView) {
+        public CacheHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView;
+            nameTextView = (TextView) itemView.findViewById(R.id.cache_name);
+            difficultyTextView = (TextView) itemView.findViewById(R.id.cache_difficulty);
+            findTimeTextView = (TextView) itemView.findViewById(R.id.cache_find_time);
         }
 
-        public void bindCache(String name) {
-            nameTextView.setText(name);
+        public void bindCache(FoundCaches.Cache cache) {
+            nameTextView.setText(cache.name);
+            difficultyTextView.setText(FormattingUtilities.getDifficultyString(cache.difficulty, getContext()));
+            findTimeTextView.setText(FormattingUtilities.getTimeAgoString(cache.found, getContext()));
         }
     }
 
     private class CacheAdapter extends RecyclerView.Adapter<CacheHolder> {
 
-        private List<String> items;
+        private List<FoundCaches.Cache> items;
 
-        public CacheAdapter(List<String> items) {
+        public CacheAdapter(List<FoundCaches.Cache> items) {
             this.items = items;
         }
 
         @Override
         public CacheHolder onCreateViewHolder(ViewGroup parent, int pos) {
-            TextView view = new TextView(getContext());
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_found_cache, parent, false);
             return new CacheHolder(view);
         }
 
         @Override
         public void onBindViewHolder(CacheHolder holder, int pos) {
-            String item = items.get(pos);
+            FoundCaches.Cache item = items.get(pos);
             holder.bindCache(item);
         }
 

@@ -2,4 +2,6 @@
     <string name="app_name">Geocaching</string>
     <string name="button_title">Click Me</string>
     <string name="button_clicks">Clicked %d times</string>
+    <string name="difficulty_out_of_five">Difficulty %d of 5</string>
+    <string name="find_time">Found %s</string>
 </resources>
