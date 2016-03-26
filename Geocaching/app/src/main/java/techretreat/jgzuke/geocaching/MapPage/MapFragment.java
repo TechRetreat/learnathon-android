@@ -34,7 +34,6 @@ import techretreat.jgzuke.geocaching.Utilities.UiUtilities;
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
     // Data
-    private Map<Marker, String> markerToCacheId;
     private Map<String, MapCaches.Cache> mapCaches;
     private Map<String, FoundCaches.Cache> foundCaches;
 
@@ -114,7 +113,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             @Override
             public View getInfoContents(Marker marker) {
                 View infoView = getLayoutInflater(null).inflate(R.layout.map_item_cache, null);
-                String cacheId = markerToCacheId.get(marker);
+                String cacheId = marker.getTitle();
                 MapCaches.Cache mapCache = mapCaches.get(cacheId);
 
                 TextView name = (TextView) infoView.findViewById(R.id.name);
@@ -128,7 +127,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                String cacheId = markerToCacheId.get(marker);
+                String cacheId = marker.getTitle();
                 MapCaches.Cache mapCache = mapCaches.get(cacheId);
                 FoundCaches.Cache foundCache = foundCaches.get(cacheId);
                 openViewDetailsDialog(cacheId, mapCache, foundCache);
@@ -161,7 +160,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     private void makeMarkers() {
-        markerToCacheId = new HashMap<>(mapCaches.size());
         for (Map.Entry<String, MapCaches.Cache> entry : mapCaches.entrySet()) {
             boolean found = foundCaches.containsKey(entry.getKey());
             MapCaches.Cache cache = entry.getValue();
@@ -169,8 +167,8 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             float iconColor = found ? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(position)
-                    .icon(BitmapDescriptorFactory.defaultMarker(iconColor)));
-            markerToCacheId.put(marker, entry.getKey());
+                    .icon(BitmapDescriptorFactory.defaultMarker(iconColor))
+                    .title(entry.getKey()));
         }
     }
 

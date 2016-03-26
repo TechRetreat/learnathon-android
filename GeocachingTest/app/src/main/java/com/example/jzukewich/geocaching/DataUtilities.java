@@ -12,11 +12,11 @@ import java.io.InputStream;
  */
 public class DataUtilities {
 
-    public interface Receiver {
+    public interface FoundCachesReceiver {
         void onResults(FoundCaches results);
     }
 
-    public static void getResponseTest(Context context, Receiver receiver) {
+    public static void getFoundCaches(Context context, FoundCachesReceiver receiver) {
         try {
             InputStream is = context.getResources().openRawResource(R.raw.caches_found);
             int size = is.available();
@@ -30,8 +30,15 @@ public class DataUtilities {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        /*try {
-            InputStream is = context.getResources().openRawResource(PATH_TO_TEST_JSON_ID.get(path));
+    }
+
+    public interface MapCachesReceiver {
+        void onResults(MapCaches results);
+    }
+
+    public static void getMapCaches(Context context, MapCachesReceiver receiver) {
+        try {
+            InputStream is = context.getResources().openRawResource(R.raw.caches_map);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -39,10 +46,9 @@ public class DataUtilities {
             String json = new String(buffer, "UTF-8");
 
             Gson gson = new Gson();
-            receiver.onResults(gson.fromJson(json, type));
+            receiver.onResults(gson.fromJson(json, MapCaches.class));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        receiver.onError();*/
     }
 }

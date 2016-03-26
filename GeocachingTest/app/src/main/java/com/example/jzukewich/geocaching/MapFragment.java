@@ -10,12 +10,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by jgzuke on 16-03-25.
  */
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
+
+    private Map<String, MapCaches.Cache> mapCaches;
+    private Map<String, FoundCaches.Cache> foundCaches;
 
     // We will use this Object to control the map shown on the screen
     private GoogleMap googleMap;
@@ -30,11 +39,37 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     // Called when the map is ready to use
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         // Save this object to use later
         this.googleMap = googleMap;
 
         zoomToUserLocation();
+
+        DataUtilities.getFoundCaches(getContext(), new DataUtilities.FoundCachesReceiver() {
+            @Override
+            public void onResults(FoundCaches results) {
+                foundCaches = results.caches;
+            }
+        });
+        DataUtilities.getMapCaches(getContext(), new DataUtilities.MapCachesReceiver() {
+            @Override
+            public void onResults(MapCaches results) {
+                mapCaches = results.caches;
+                makeMarkers();
+            }
+        });
+    }
+
+    private void makeMarkers() {
+        for (MapCaches.Cache cache : mapCaches.values()) {
+            LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
+            boolean hasBeenFound = foundCaches.containsKey(cache.name);
+            float iconColor = hasBeenFound? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
+            googleMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .icon(BitmapDescriptorFactory.defaultMarker(iconColor))
+                    .title(cache.name));
+        }
     }
 
     private void zoomToUserLocation() {
