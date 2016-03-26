@@ -4,4 +4,6 @@
     <string name="button_clicks">Clicked %d times</string>
     <string name="difficulty_out_of_five">Difficulty %d of 5</string>
     <string name="find_time">Found %s</string>
+    <string name="marker_info_window_see_details">See Details…</string>
+    <string name="found_it_button_text">Found it!</string>
 </resources>

@@ -3,9 +3,12 @@ package com.example.jzukewich.geocaching;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * Created by jgzuke on 16-03-20.
@@ -13,7 +16,7 @@ import java.io.InputStream;
 public class DataUtilities {
 
     public interface FoundCachesReceiver {
-        void onResults(FoundCaches results);
+        void onResults(Map<String, FoundCache> results);
     }
 
     public static void getFoundCaches(Context context, FoundCachesReceiver receiver) {
@@ -26,14 +29,16 @@ public class DataUtilities {
             String json = new String(buffer, "UTF-8");
 
             Gson gson = new Gson();
-            receiver.onResults(gson.fromJson(json, FoundCaches.class));
+            Type responseType  = new TypeToken<Map<String, FoundCache>>() {}.getType();
+            Map<String, FoundCache> foundCacheMap = gson.fromJson(json, responseType);
+            receiver.onResults(foundCacheMap);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public interface MapCachesReceiver {
-        void onResults(MapCaches results);
+        void onResults(Map<String, MapCache> results);
     }
 
     public static void getMapCaches(Context context, MapCachesReceiver receiver) {
@@ -46,7 +51,8 @@ public class DataUtilities {
             String json = new String(buffer, "UTF-8");
 
             Gson gson = new Gson();
-            receiver.onResults(gson.fromJson(json, MapCaches.class));
+            Map<String, MapCache> cacheMap = gson.fromJson(json, new TypeToken<Map<String, MapCache>>() {}.getType());
+            receiver.onResults(cacheMap);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
