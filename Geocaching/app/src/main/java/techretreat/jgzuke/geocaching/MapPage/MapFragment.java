@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,7 +39,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     private Map<String, FoundCaches.Cache> foundCaches;
 
     // View
-    private GoogleMap map;
+    private GoogleMap googleMap;
 
     // Callback
     private Callback callback;
@@ -62,14 +63,14 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     public void setMapCaches(Map<String, MapCaches.Cache> mapCaches) {
         this.mapCaches = mapCaches;
-        if (map != null && foundCaches != null) {
+        if (googleMap != null && foundCaches != null) {
             makeMarkers();
         }
     }
 
     public void setFoundCaches(Map<String, FoundCaches.Cache> foundCaches) {
         this.foundCaches = foundCaches;
-        if (map != null && mapCaches != null) {
+        if (googleMap != null && mapCaches != null) {
             makeMarkers();
         }
     }
@@ -82,10 +83,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
+        this.googleMap = googleMap;
         setMapSettings();
         setMarkerPopupAdapter();
-        tryZoomToStartingLocation();
+        zoomToUserLocation();
         if (mapCaches != null && foundCaches != null) {
             makeMarkers();
         }
@@ -96,7 +97,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         boolean locationEnabled = PreferenceUtilities.getLocationEnabled(getContext());
         boolean zoomControlsEnabled = PreferenceUtilities.getZoomButtonsEnabled(getContext());
         boolean toolbarEnabled = PreferenceUtilities.getToolbarEnabled(getContext());
-        UiSettings settings = map.getUiSettings();
+        UiSettings settings = googleMap.getUiSettings();
         settings.setCompassEnabled(compassEnabled);
         settings.setMyLocationButtonEnabled(locationEnabled);
         settings.setZoomControlsEnabled(zoomControlsEnabled);
@@ -104,7 +105,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     }
 
     private void setMarkerPopupAdapter() {
-        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker arg0) {
                 return null;
@@ -117,44 +118,20 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 MapCaches.Cache mapCache = mapCaches.get(cacheId);
 
                 TextView name = (TextView) infoView.findViewById(R.id.name);
-                TextView description = (TextView) infoView.findViewById(R.id.description);
+                TextView description = (TextView) infoView.findViewById(R.id.difficulty);
 
                 name.setText(mapCache.name);
                 description.setText(mapCache.description);
                 return infoView;
             }
         });
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String cacheId = marker.getTitle();
-                openViewDetailsDialog(cacheId, mapCache, foundCache);
+                //openViewDetailsDialog(cacheId);
             }
         });
-    }
-
-    private void openViewDetailsDialog(final String cacheId, MapCaches.Cache mapCache, FoundCaches.Cache foundCache) {
-        View dialogBody = getLayoutInflater(null).inflate(R.layout.dialog_view_cache_details, null);
-        TextView name = (TextView) dialogBody.findViewById(R.id.cache_name);
-        TextView description = (TextView) dialogBody.findViewById(R.id.cache_description);
-        TextView cacheFound = (TextView) dialogBody.findViewById(R.id.cache_found);
-
-        name.setText(mapCache.name);
-        description.setText(mapCache.description);
-        boolean hasBeenFound = foundCache != null;
-        if (hasBeenFound) {
-            cacheFound.setBackgroundResource(R.color.button_inactive);
-            cacheFound.setText(UiUtilities.getTimeAgoString(foundCache.found, getContext()));
-        } else {
-            cacheFound.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    callback.setCacheFound(cacheId);
-                }
-            });
-        }
-
-        new AlertDialog.Builder(getContext()).setView(dialogBody).create().show();
     }
 
     private void makeMarkers() {
@@ -163,34 +140,21 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             MapCaches.Cache cache = entry.getValue();
             LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
             float iconColor = found ? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
-            Marker marker = map.addMarker(new MarkerOptions()
+            Marker marker = googleMap.addMarker(new MarkerOptions()
                     .position(position)
                     .icon(BitmapDescriptorFactory.defaultMarker(iconColor))
                     .title(entry.getKey()));
         }
     }
 
-    public void updateLocationPermissions() {
-        tryZoomToStartingLocation();
-    }
-
-    private void tryZoomToStartingLocation() {
-        Location location = getLocationOrRequestPermissions();
-        if (location != null) {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-        }
-    }
-
-    private Location getLocationOrRequestPermissions() {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
-                getContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                getContext().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            getActivity().requestPermissions(permissions, GeocachingActivity.MAPS_PAGE_LOCATION_PERMISSIONS_REQUEST_CODE);
-            return null;
-        }
+    private void zoomToUserLocation() {
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        return locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(new Criteria(), false));
+        if (location != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+        } else {
+            // Default to a location in Waterloo
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.38224, -80.32682), 13));
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.HashMap;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 /**
@@ -36,7 +37,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     // onCreate is called when the Fragment is created
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        super.onCreate(savedInstanceState);
         // This requests access to the GoogleMap, we will talk about what Async means later
         getMapAsync(this);
     }

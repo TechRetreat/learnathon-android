@@ -24,27 +24,9 @@ public class FoundCachesFragment extends Fragment {
     private CacheAdapter cachesRecycerViewAdapter;
     private RecyclerView cachesRecycerView;
 
-    private TextView helloWorldTextView;
-    private Button clickMeButton;
-    private int buttonClicks = 0;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_found_caches, container, false);
-
-        helloWorldTextView = (TextView) rootView.findViewById(R.id.my_text_view);
-        clickMeButton = (Button) rootView.findViewById(R.id.my_button);
-
-        clickMeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("Geocaching", "button Clicked");
-                buttonClicks++;
-                String clicks = getResources().getString(R.string.button_clicks, buttonClicks);
-                helloWorldTextView.setText(clicks);
-            }
-        });
-
 
         cachesRecycerView = (RecyclerView) rootView.findViewById(R.id.found_caches_recycler_view);
         cachesRecycerView.setLayoutManager(new LinearLayoutManager(getActivity()));
