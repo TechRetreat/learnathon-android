@@ -6,4 +6,16 @@
     <string name="find_time">Found %s</string>
     <string name="marker_info_window_see_details">See Details…</string>
     <string name="found_it_button_text">Found it!</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="action_settings_title">Actions</string>
+    <string name="clear_found_caches_description">Clear Found Caches</string>
+    <string name="clear_found_caches_title">Reset the caches that you have marked as found</string>
+
+    <string name="map_settings_title">Map settings</string>
+    <string name="zoom_enabled_title">Zoom Buttons Enabled</string>
+    <string name="zoom_enabled_description">Show on screen zoom control buttons</string>
+    <string name="toolbar_enabled_title">Toolbar Enabled</string>
+    <string name="toolbar_enabled_description">Show directions toolbar when you select a cache</string>
 </resources>

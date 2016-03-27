@@ -19,6 +19,10 @@ public class DataUtilities {
         void onResults(Map<String, FoundCache> results);
     }
 
+    public static <T> void test() {
+        Type test = new TypeToken<T>() {}.getType();
+    }
+
     public static void getFoundCaches(Context context, FoundCachesReceiver receiver) {
         try {
             InputStream is = context.getResources().openRawResource(R.raw.caches_found);

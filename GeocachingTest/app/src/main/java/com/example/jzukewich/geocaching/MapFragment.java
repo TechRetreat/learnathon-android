@@ -2,10 +2,12 @@ package com.example.jzukewich.geocaching;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -26,6 +29,7 @@ import java.util.Map;
  */
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
 
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private Map<String, MapCache> mapCaches;
     private Map<String, FoundCache> foundCaches;
 
@@ -62,13 +66,34 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 setMarkerPopupAdapter();
             }
         });
+        setMapSettings();
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                setMapSettings();
+            }
+        };
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        preferences.registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(getContext()).unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
+    private void setMapSettings() {
+        UiSettings settings = googleMap.getUiSettings();
+        settings.setZoomControlsEnabled(PreferenceUtilities.getZoomEnabled(getContext()));
+        settings.setMapToolbarEnabled(PreferenceUtilities.getToolbarEnabled(getContext()));
     }
 
     private void makeMarkers() {
         for (MapCache cache : mapCaches.values()) {
             LatLng position = new LatLng(cache.location.latitude, cache.location.longitude);
             boolean hasBeenFound = foundCaches.containsKey(cache.name);
-            float iconColor = hasBeenFound? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
+            float iconColor = hasBeenFound ? BitmapDescriptorFactory.HUE_AZURE : BitmapDescriptorFactory.HUE_RED;
             googleMap.addMarker(new MarkerOptions()
                     .position(position)
                     .icon(BitmapDescriptorFactory.defaultMarker(iconColor))

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="action_settings"
+        android:title="@string/action_settings_title">
+
+        <Preference
+            android:key="action_settings_clear_found_caches"
+            android:summary="@string/clear_found_caches_description"
+            android:title="@string/clear_found_caches_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="map_settings"
+        android:title="@string/map_settings_title">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="map_settings_zoom_buttons_enabled"
+            android:summary="@string/zoom_enabled_description"
+            android:title="@string/zoom_enabled_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="map_settings_toolbar_enabled"
+            android:summary="@string/toolbar_enabled_description"
+            android:title="@string/toolbar_enabled_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

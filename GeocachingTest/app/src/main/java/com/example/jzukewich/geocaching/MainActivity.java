@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         public static final int FOUND_TAB = 0;
         public static final int MAP_TAB = 1;
+        public static final int SETTINGS_TAB = 2;
 
         public GeocachingPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -43,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == FOUND_TAB) {
                 return new FoundCachesFragment();
-            } else {
+            } else if (position == MAP_TAB) {
                 return new MapFragment();
+            } else {
+                return new SettingsFragment();
             }
         }
 
@@ -52,36 +55,16 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             if (position == FOUND_TAB) {
                 return getString(R.string.found);
-            } else {
+            } else if (position == MAP_TAB) {
                 return getString(R.string.map);
+            } else {
+                return getString(R.string.settings);
             }
         }
 
         @Override
         public int getCount() {
-            return 2;
-        }
-    }
-
-    class GeocachingPagerAdapter2 extends FragmentStatePagerAdapter {
-
-        public GeocachingPagerAdapter2(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 0;
+            return 3;
         }
     }
 }
