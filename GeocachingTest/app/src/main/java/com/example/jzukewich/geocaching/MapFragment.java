@@ -6,7 +6,10 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.support.v4.app.Fragment;
+=======
+>>>>>>> origin/master
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
